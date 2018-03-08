@@ -1,6 +1,8 @@
 # ERC *Draft* Specification
 Mineable Token Specification
 
+# Preamble
+
     EIP: <to be assigned>
     Title: Mineable Token Standard
     Author: Jay Logelin <jlogelin@fas.harvard.edu>
@@ -8,15 +10,16 @@ Mineable Token Specification
     Category: ERC
     Status: Draft
     Created: 2018-03-07
+    Requires: ERC-20
 
-# Summary
+# Simple Summary
 A standard interface for mineable tokens.
 
 # Abstract
-The following standard allows for the implementation of a standard API for mineable tokens within smart contracts. This standard provides basic functionality to mine and reward ERC20 tokens with a Proof of Work scheme.
+The following standard allows for the implementation of a standard API for mineable tokens within smart contracts. This standard provides basic functionality to mine and reward ERC20 tokens using a Proof of Work scheme.
 
 # Motivation
-A standard interface allows any Mineable ERC20 Tokens on Ethereum to be handled by general-purpose applications. Tokens within the Ethereum ecosystem may still require economic incentivization that proof of work mining provides. Specifically, the smart contract implementation will allow for Mineable ERC20 tokens to be tracked in standardized wallets, traded on exchanges, and interfaced with standardized third party mining tools and equipment.
+A standard interface allows any Mineable ERC20 Tokens on Ethereum to be handled by general-purpose applications. Tokens within the Ethereum ecosystem may still require economic incentivization that proof of work mining provides. Specifically, the smart contract implementation will allow for Mineable ERC20 tokens to be tracked in standardized wallets, traded on exchanges, and interfaced with standardized third party mining software and equipment.
 
 # Specification
 ## Token
@@ -35,7 +38,7 @@ function name() constant returns (string name)
 
 #### symbol
 
-Returns the symbol of the token. e.g. `"0xDOGE"`.
+Returns the symbol of the token. e.g. `"0xBTC"`.
 
 OPTIONAL - This method can be used to improve usability,
 but interfaces and other contracts MUST NOT expect these values to be present.
