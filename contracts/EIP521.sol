@@ -50,6 +50,7 @@ contract EIP521 is EIP521Interface, Owned {
         uint public  _MAXIMUM_TARGET = 2**234;
 
 
+
         uint public miningTarget;
 
         bytes32 public challengeNumber;   //generate a new one when a new reward is minted
@@ -59,10 +60,20 @@ contract EIP521 is EIP521Interface, Owned {
         uint public rewardEra;
         uint public maxSupplyForEra;
 
+        uint public MAX_REWARD_ERA = 39;
+        uint public MINING_RATE_FACTOR = 60; //mint the token 60 times less often than ether
 
         address public lastRewardTo;
         uint public lastRewardAmount;
         uint public lastRewardEthBlockNumber;
+
+
+        //difficulty adjustment parameters- be careful modifying these
+        uint public MAX_ADJUSTMENT_PERCENT = 100;
+        uint public TARGET_DIVISOR = 2000;
+        uint public QUOTIENT_LIMIT = TARGET_DIVISOR.div(2);
+
+
 
         bool locked = false;
 
@@ -164,14 +175,15 @@ contract EIP521 is EIP521Interface, Owned {
             }
 
 
-        //a new 'block' to be mined
+
+        //DO NOT manually edit this method unless you know EXACTLY what you are doing
         function _startNewMiningEpoch() internal {
 
           //if max supply for the era will be exceeded next reward round then enter the new era before that happens
 
           //40 is the final reward era, almost all tokens minted
           //once the final era is reached, more tokens will not be given out because the assert function
-          if( tokensMinted.add(getMiningReward()) > maxSupplyForEra && rewardEra < 39)
+          if( tokensMinted.add(getMiningReward()) > maxSupplyForEra && rewardEra < MAX_REWARD_ERA)
           {
             rewardEra = rewardEra + 1;
           }
@@ -194,19 +206,13 @@ contract EIP521 is EIP521Interface, Owned {
           challengeNumber = block.blockhash(block.number - 1);
 
 
-
-
-
-
         }
 
 
 
 
-        //https://en.bitcoin.it/wiki/Difficulty#What_is_the_formula_for_difficulty.3F
-        //as of 2017 the bitcoin difficulty was up to 17 zeroes, it was only 8 in the early days
 
-        //readjust the target by 5 percent
+        //DO NOT manually edit this method unless you know EXACTLY what you are doing
         function _reAdjustDifficulty() internal {
 
 
@@ -214,27 +220,30 @@ contract EIP521 is EIP521Interface, Owned {
             //assume 360 ethereum blocks per hour
 
             //we want miners to spend 10 minutes to mine each 'block', about 60 ethereum blocks = one 0xbitcoin epoch
-            uint epochsMined = _BLOCKS_PER_READJUSTMENT; //256
+            uint epochsMined = _BLOCKS_PER_READJUSTMENT;
 
-            uint targetEthBlocksPerDiffPeriod = epochsMined * 60; //should be 60 times slower than ethereum
+            uint targetEthBlocksPerDiffPeriod = epochsMined * MINING_RATE_FACTOR;
+
+
+
 
             //if there were less eth blocks passed in time than expected
             if( ethBlocksSinceLastDifficultyPeriod < targetEthBlocksPerDiffPeriod )
             {
-              uint excess_block_pct = (targetEthBlocksPerDiffPeriod.mul(100)).div( ethBlocksSinceLastDifficultyPeriod );
+              uint excess_block_pct = (targetEthBlocksPerDiffPeriod.mul(MAX_ADJUSTMENT_PERCENT)).div( ethBlocksSinceLastDifficultyPeriod );
 
-              uint excess_block_pct_extra = excess_block_pct.sub(100).limitLessThan(1000);
+              uint excess_block_pct_extra = excess_block_pct.sub(100).limitLessThan(QUOTIENT_LIMIT);
               // If there were 5% more blocks mined than expected then this is 5.  If there were 100% more blocks mined than expected then this is 100.
 
               //make it harder
-              miningTarget = miningTarget.sub(miningTarget.div(2000).mul(excess_block_pct_extra));   //by up to 50 %
+              miningTarget = miningTarget.sub(miningTarget.div(TARGET_DIVISOR).mul(excess_block_pct_extra));   //by up to 50 %
             }else{
-              uint shortage_block_pct = (ethBlocksSinceLastDifficultyPeriod.mul(100)).div( targetEthBlocksPerDiffPeriod );
+              uint shortage_block_pct = (ethBlocksSinceLastDifficultyPeriod.mul(MAX_ADJUSTMENT_PERCENT)).div( targetEthBlocksPerDiffPeriod );
 
-              uint shortage_block_pct_extra = shortage_block_pct.sub(100).limitLessThan(1000); //always between 0 and 1000
+              uint shortage_block_pct_extra = shortage_block_pct.sub(100).limitLessThan(QUOTIENT_LIMIT); //always between 0 and 1000
 
               //make it easier
-              miningTarget = miningTarget.add(miningTarget.div(2000).mul(shortage_block_pct_extra));   //by up to 50 %
+              miningTarget = miningTarget.add(miningTarget.div(TARGET_DIVISOR).mul(shortage_block_pct_extra));   //by up to 50 %
             }
 
 
