@@ -38,6 +38,7 @@ contract EIP521 is EIP521Interface, Owned {
 
         uint public epochCount;//number of 'blocks' mined
 
+        uint public BASE_MINING_REWARD = 50;
 
         uint public _BLOCKS_PER_READJUSTMENT = 1024;
 
@@ -95,18 +96,24 @@ contract EIP521 is EIP521Interface, Owned {
 
         // ------------------------------------------------------------------------
 
-        function _0xBitcoinToken() public onlyOwner{
+        function _MintedToken() public onlyOwner{
 
 
 
-            symbol = "0xBTC";
+            symbol = "???";
 
-            name = "0xBitcoin Token";
+            name = "???";
 
             decimals = 8;
 
             _totalSupply = 21000000 * 10**uint(decimals);
 
+
+
+
+
+
+            // -- do not change lines below --
             if(locked) revert();
             locked = true;
 
@@ -285,7 +292,7 @@ contract EIP521 is EIP521Interface, Owned {
 
              //every reward era, the reward amount halves.
 
-             return (50 * 10**uint(decimals) ).div( 2**rewardEra ) ;
+             return (BASE_MINING_REWARD * 10**uint(decimals) ).div( 2**rewardEra ) ;
 
         }
 
