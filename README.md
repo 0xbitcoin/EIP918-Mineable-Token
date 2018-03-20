@@ -1,2 +1,2 @@
 Mineable Token Standard EIP
-moved to https://github.com/jlogelin/EIPs/blob/e0d6db1890011af2c3deca9113ee199b8bd4f324/EIPS/eip-541.md
+moved to https://github.com/jlogelin/EIPs/blob/5c9c48b8585c8579c930f737f20cec9862eb0587/EIPS/eip-918.md
