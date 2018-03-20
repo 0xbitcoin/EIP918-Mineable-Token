@@ -28,7 +28,7 @@ contract EIP541 is EIP541Interface, Owned {
 
         uint8 public decimals;
 
-        uint public _totalSupply;
+        uint256 public totalSupply;
 
 
 
@@ -106,7 +106,7 @@ contract EIP541 is EIP541Interface, Owned {
 
             decimals = 8;
 
-            _totalSupply = 21000000 * 10**uint(decimals);
+            totalSupply = 21000000 * 10**uint(decimals);
 
 
 
@@ -120,7 +120,7 @@ contract EIP541 is EIP541Interface, Owned {
             tokensMinted = 0;
 
             rewardEra = 0;
-            maxSupplyForEra = _totalSupply.div(2);
+            maxSupplyForEra = totalSupply.div(2);
 
             miningTarget = _MAXIMUM_TARGET;
 
@@ -130,8 +130,8 @@ contract EIP541 is EIP541Interface, Owned {
 
 
             //The owner gets nothing! You must mine this ERC20 token
-            //balances[owner] = _totalSupply;
-            //Transfer(address(0), owner, _totalSupply);
+            //balances[owner] = totalSupply;
+            //Transfer(address(0), owner, totalSupply);
 
         }
 
@@ -197,7 +197,7 @@ contract EIP541 is EIP541Interface, Owned {
 
           //set the next minted supply at which the era will change
           // total supply is 2100000000000000  because of 8 decimal places
-          maxSupplyForEra = _totalSupply - _totalSupply.div( 2**(rewardEra + 1));
+          maxSupplyForEra = totalSupply - totalSupply.div( 2**(rewardEra + 1));
 
           epochCount = epochCount.add(1);
 
@@ -326,7 +326,7 @@ contract EIP541 is EIP541Interface, Owned {
 
         function totalSupply() public constant returns (uint) {
 
-            return _totalSupply  - balances[address(0)];
+            return totalSupply  - balances[address(0)];
 
         }
 

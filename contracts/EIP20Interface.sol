@@ -14,7 +14,7 @@ contract EIP20Interface {
     function by the compiler.
     */
     /// total amount of tokens
-    function totalSupply() public constant returns (uint);
+    uint256 public totalSupply;
 
     /// @param _owner The address from which the balance will be retrieved
     /// @return The balance
