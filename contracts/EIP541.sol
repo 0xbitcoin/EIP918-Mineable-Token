@@ -1,5 +1,5 @@
 /*
-Implements EIP541 token standard: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
+Implements EIP541 token standard: https://github.com/0xbitcoin/ERC541-Spec/blob/master/contracts/EIP541.sol
 .*/
 
 
