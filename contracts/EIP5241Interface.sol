@@ -4,8 +4,8 @@ pragma solidity ^0.4.18;
 
 import "./EIP20Interface.sol";
 
-contract EIP521Interface is EIP20Interface {
- 
+contract EIP541Interface is EIP20Interface {
+
   function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success);
 
   function getChallengeNumber() public constant returns (bytes32);

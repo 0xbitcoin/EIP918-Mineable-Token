@@ -1,5 +1,5 @@
 /*
-Implements EIP521 token standard: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
+Implements EIP541 token standard: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
 .*/
 
 
@@ -7,7 +7,7 @@ pragma solidity ^0.4.18;
 
 import "./EIP20Interface.sol";
 
-import "./EIP521Interface.sol";
+import "./EIP541Interface.sol";
 
 import "./SafeMath.sol";
 
@@ -16,7 +16,7 @@ import "./ExtendedMath.sol";
 import "./Owned.sol";
 
 
-contract EIP521 is EIP521Interface, Owned {
+contract EIP541 is EIP541Interface, Owned {
 
     using SafeMath for uint;
     using ExtendedMath for uint;
