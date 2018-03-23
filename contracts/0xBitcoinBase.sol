@@ -116,7 +116,9 @@ contract _0xBitcoinBase is AbstractERC918, EIP20Interface {
     //DO NOT manually edit this method unless you know EXACTLY what you are doing
     function _adjustDifficulty() internal returns (uint) {
         //every so often, readjust difficulty. Dont readjust when deploying
-        require(epochCount % blocksPerReadjustment == 0);
+        if(epochCount % blocksPerReadjustment != 0){
+            return difficulty;
+        }
         
         uint ethBlocksSinceLastDifficultyPeriod = block.number - latestDifficultyPeriodStarted;
         //assume 360 ethereum blocks per hour
