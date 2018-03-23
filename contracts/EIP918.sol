@@ -7,7 +7,7 @@ pragma solidity ^0.4.18;
 
 import "./EIP20Interface.sol";
 
-import "./EIP541Interface.sol";
+import "./EIP918Interface.sol";
 
 import "./SafeMath.sol";
 
@@ -16,7 +16,7 @@ import "./ExtendedMath.sol";
 import "./Owned.sol";
 
 
-contract EIP918 is EIP918Interface, Owned {
+contract EIP918 is EIP918Interface,EIP20Interface, Owned {
 
     using SafeMath for uint;
     using ExtendedMath for uint;
