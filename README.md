@@ -4,91 +4,181 @@
 pull request:
 https://github.com/ethereum/EIPs/pull/918
 
+# Preamble
 
+    EIP: <to be assigned>
+    Title: Mineable Token Standard
+    Authors: Infernal_toast <admin@0xbitcoin.org>
+             Jay Logelin <jlogelin@fas.harvard.edu>
+             Michael Seiler <mgs33@cornell.edu>
+    Type: Standard
+    Category: ERC
+    Status: Draft
+    Created: 2018-03-07
+    Requires: None
+ 
 ### Simple Summary
 
 A specification for a standardized Mineable Token that uses a Proof of Work algorithm for distribution. 
 
 ### Abstract
 
- This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet.  This mint() function uses a Proof of Work algorithm in order to minimize gas fees and control the distribution rate. Standardized CPU and GPU token mining software exists.
+This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet. This mint() function uses a Proof of Work algorithm in order to minimize gas fees and control the distribution rate. Standardized CPU and GPU token mining software exists.
 
 ### Motivation
 
-Token distribution via ICO is at best full of scams at and worst totally illegal.  Furthermore, new token projects are all centralized because a single entity must handle and control all of the initial coins and all of the the raised ICO money.  By distribution tokens via an Initial Mining Offering (known as an IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' Furthermore, investor risk exposure is significantly diminished.  Projects incorporating ERC20/ERC721 tokens can now be completely decentralized like the Bitcoin community and Ethereum development community.   
+Token distribution via the ICO model and it's derivatives is susceptable to illicit behavior by human actors. Furthermore, new token projects are centralized because a single entity must handle and control all of the initial coins and all of the the raised ICO money.  By distributing tokens via an Initial Mining Offering (known as an IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' As a result, investor risk exposure utilizing a mined token distribution model is significantly diminished. This standard is intended to be standalone, allowing maximum interoperability with ERC20, ERC721, and others.
 
- 
- 
 ### Specification
  
-The most important method for EIP918 is mint() for the token distribution and it is incorporated as follows for a SHA3 algorithm: 
+### Fields
 
+#### challengeNumber
+The current challenge number. It is expected tha a new challenge number is generated after a new reward is minted.
 
-     uint challengeNumber = block.blockhash(block.number - 1);
-     uint miningTarget = 2**224;
-     epochCount = 0;
+``` js
+bytes32 public challengeNumber;
+```
 
-     function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) { 
-                 
-                 bytes32 digest =  keccak256(challengeNumber, msg.sender, nonce);
+#### difficulty
+The current mining difficulty which should be adjusted via the \_adjustDifficulty minting phase
 
-                 //the challenge digest must match the expected
-                 if (digest != challenge_digest) revert();
+``` js
+uint public difficulty;
+```
 
-                 //the digest must be smaller than the target
-                 if(uint256(digest) > miningTarget) revert(); 
+#### tokensMinted
+Cumulative counter of the total minted tokens, usually modified during the \_reward phase
 
-                 //only allow one reward for each unique proof of work
-                 bytes32 solution = solutionForChallenge[challengeNumber];
-                 solutionForChallenge[challengeNumber] = digest;
-                 if(solution != 0x0) revert();  
-                
-                 //implement a custom method for number of tokens to reward for a mint
-                 uint rewardAmount = getMiningReward();
-                
-                 //use safe math to add tokens to the miners account
-                 balances[msg.sender] = balances[msg.sender].add(rewardAmount);
+``` js
+uint public tokensMinted;
+```
 
-                 //set the challenge number to a 'random' new value so future blocks cannot be premined
-                 challengeNumber = block.blockhash(block.number - 1);
-                 
-                 //A method can be added here which adjusts the mining target in order to adjust difficulty
-                 //_adjustMiningTarget()
-                 
-                 //track the number of mints that have occured
-                 epochCount = epochCount.add(1);
-                 
-                 //fire an event
-                 Mint(msg.sender, rewardAmount, epochCount, challengeNumber );
+### Mining Operations
 
-                 return true;
+#### mint
 
-            }
-            
-            function getChallengeNumber() public constant returns (bytes32) {
-            return challengeNumber;
-            }
-           
-           function getMiningTarget() public constant returns (uint) {
-             return miningTarget;
-           }
-           
-           
-           function getMiningReward() public constant returns (uint) {
-             //Feel free to modify this integer 
-             return 50 * 10**uint(decimals);
-           }
+Returns a flag indicating a successful hash digest verification. In order to prevent MiTM attacks, it is recommended that the digest include a recent ethereum block hash and msg.sender's address. Once verified, the mint function calculates and delivers a mining reward to the sender and performs internal accounting operations on the contract's supply.
+
+The mint operation exists as a public function that invokes 4 separate phases, represented as internal functions \_hash, \_reward, \_newEpoch, and \_adjustDifficulty. In order to create the most flexible implementation while adhering to a necessary contract protocol, it is recommended that token implementors override the internal methods, allowing the base contract to handle their execution via mint.
+
+This externally facing function is called by miners to validate challenge digests, calculate reward,
+populate statistics, mutate epoch variables and adjust the solution difficulty as required. Once complete,
+a Mint event is emitted before returning a boolean success flag.
+
+``` js
+// cumulative counter of the total minted tokens
+uint public tokensMinted;
+    
+// track read only minting statistics
+struct Statistics {
+    address lastRewardTo;
+    uint lastRewardAmount;
+    uint lastRewardEthBlockNumber;
+    uint lastRewardTimestamp;
+}
+
+Statistics public statistics;
+
+function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
+    // perform the hash function validation
+    _hash(nonce, challenge_digest);
+    
+    // calculate the current reward
+    uint rewardAmount = _reward();
+    
+    // increment the minted tokens amount
+    tokensMinted += rewardAmount;
+    
+    uint epochCount = _newEpoch(nonce);
+    
+    _adjustDifficulty();
+    
+     //populate read only diagnostics data
+    statistics = Statistics(msg.sender, rewardAmount, block.number, now);
    
+    // send Mint event indicating a successful implementation
+    Mint(msg.sender, rewardAmount, epochCount, challengeNumber);
+    
+    return true;
+}
+```
 
+##### *Mint Event*
+
+Upon successful verification and reward the mint method dispatches a Mint Event indicating the reward address, the reward amount, the epoch count and newest challenge number.
+
+``` js
+event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
+```
+
+#### \_hash
+
+Internal interface function \_hash, meant to be overridden in implementation to define hashing algorithm and validation. Returns the validated digest
+
+``` js
+function _hash(uint256 nonce, bytes32 challenge_digest) internal returns (bytes32 digest);
+```
+
+#### \_reward
+
+Internal interface function \_reward, meant to be overridden in implementation to calculate and allocate the reward amount. The reward amount must be returned by this method.
+
+``` js
+function _reward() internal returns (uint);
+```
+
+#### \_newEpoch
+
+Internal interface function \_newEpoch, meant to be overridden in implementation to define a cutpoint for mutating mining variables in preparation for the next phase of mine.
+
+``` js
+function _newEpoch(uint256 nonce) internal returns (uint);
+```
+
+#### \_adjustDifficulty
+
+Internal interface function \_adjustDifficulty, meant to be overridden in implementation to adjust the difficulty (via field difficulty) of the mining as required
+
+``` js
+function _adjustDifficulty() internal returns (uint);
+```
+
+#### getChallengeNumber
+
+Recent ethereum block hash, used to prevent pre-mining future blocks.
+
+``` js
+function getChallengeNumber() public constant returns (bytes32) 
+```
+
+#### getMiningDifficulty
+
+The number of digits that the digest of the PoW solution requires which typically auto adjusts during reward generation.Return the current reward amount. Depending on the algorithm, typically rewards are divided every reward era as tokens are mined to provide scarcity.
+
+
+``` js
+function getMiningDifficulty() public constant returns (uint)
+```
+
+#### getMiningReward
+
+Return the current reward amount. Depending on the algorithm, typically rewards are divided every reward era as tokens are mined to provide scarcity.
+
+``` js
+function getMiningReward() public constant returns (uint)
+```
+
+### Example mining function
 A general mining function written in python for finding a valid nonce is as follows: 
-
-    def mine(challenge, public_address, difficulty):
-      while True:
-        nonce = generate_random_number()
-        hash1 = int(sha3.keccak_256(challenge+public_address+nonce).hexdigest(), 16)
-        if hash1 < difficulty:
-          return nonce, hash1
-
+```
+def mine(challenge, public_address, difficulty):
+  while True:
+    nonce = generate_random_number()
+    hash1 = int(sha3.keccak_256(challenge+public_address+nonce).hexdigest(), 16)
+    if hash1 < difficulty:
+      return nonce, hash1
+```
 
 Once the nonce and hash1 are found, these are used to call the mint() function of the smart contract to receive a reward of tokens.
 
@@ -108,8 +198,6 @@ Backwards incompatibilities are not introduced.
 (Test cases for an implementation are mandatory for EIPs that are affecting consensus changes. Other EIPs can choose to include links to test cases if applicable.)
 
 
-
-
 ### Implementation
 (The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.)
 
@@ -121,4 +209,4 @@ https://github.com/mining-visualizer/MVis-tokenminer/releases
 
 
 ### Copyright
-Copyright and related rights waived via CC0.
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
