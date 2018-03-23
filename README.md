@@ -11,7 +11,7 @@ A specification for a standardized Mineable Token that uses a Proof of Work algo
 
 ### Abstract
 
- This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet.  This mint() function typically requires a Proof of Work algorithm in order to minimize gas fees.
+ This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet.  This mint() function typically requires a Proof of Work algorithm in order to minimize gas fees. Standardized CPU and GPU token mining software exists.
 
 ### Motivation
 
@@ -32,6 +32,14 @@ All EIPs that introduce backwards incompatibilities must include a section descr
 
 ### Test Cases
 Test cases for an implementation are mandatory for EIPs that are affecting consensus changes. Other EIPs can choose to include links to test cases if applicable.
+
+0xBitcoin Token Contract: 
+https://etherscan.io/address/0xb6ed7644c69416d67b522e20bc294a9a9b405b31
+
+MVI OpenCL Token Miner 
+https://github.com/mining-visualizer/MVis-tokenminer/releases
+
+
 
 ### Implementation
 The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.
