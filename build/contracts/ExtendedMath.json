@@ -1,0 +1,294 @@
+{
+  "contractName": "ExtendedMath",
+  "abi": [],
+  "bytecode": "0x60606040523415600e57600080fd5b603580601b6000396000f3006060604052600080fd00a165627a7a723058201ab7f43fcc995f0c19af0e735acac5358a22795339f2939164de72dc8378ddf60029",
+  "deployedBytecode": "0x6060604052600080fd00a165627a7a723058201ab7f43fcc995f0c19af0e735acac5358a22795339f2939164de72dc8378ddf60029",
+  "sourceMap": "27:209:3:-;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "27:209:3:-;;;;;",
+  "source": "\npragma solidity ^0.4.18;\n\nlibrary ExtendedMath {\n\n\n    //return the smaller of the two inputs (a or b)\n    function limitLessThan(uint a, uint b) internal pure returns (uint c) {\n\n        if(a > b) return b;\n\n        return a;\n\n    }\n}\n",
+  "sourcePath": "/home/andy/dev/ERC541-Spec/contracts/ExtendedMath.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/home/andy/dev/ERC541-Spec/contracts/ExtendedMath.sol",
+      "exportedSymbols": {
+        "ExtendedMath": [
+          945
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 926,
+        "name": "PragmaDirective",
+        "src": "1:24:3"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "library",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            945
+          ],
+          "name": "ExtendedMath",
+          "scope": 946
+        },
+        "children": [
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "limitLessThan",
+              "payable": false,
+              "scope": 945,
+              "stateMutability": "pure",
+              "superFunction": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "a",
+                      "scope": 944,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 927,
+                        "name": "ElementaryTypeName",
+                        "src": "131:4:3"
+                      }
+                    ],
+                    "id": 928,
+                    "name": "VariableDeclaration",
+                    "src": "131:6:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "b",
+                      "scope": 944,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 929,
+                        "name": "ElementaryTypeName",
+                        "src": "139:4:3"
+                      }
+                    ],
+                    "id": 930,
+                    "name": "VariableDeclaration",
+                    "src": "139:6:3"
+                  }
+                ],
+                "id": 931,
+                "name": "ParameterList",
+                "src": "130:16:3"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "c",
+                      "scope": 944,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 932,
+                        "name": "ElementaryTypeName",
+                        "src": "170:4:3"
+                      }
+                    ],
+                    "id": 933,
+                    "name": "VariableDeclaration",
+                    "src": "170:6:3"
+                  }
+                ],
+                "id": 934,
+                "name": "ParameterList",
+                "src": "169:8:3"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "falseBody": null
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "commonType": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          },
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": ">",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 928,
+                              "type": "uint256",
+                              "value": "a"
+                            },
+                            "id": 935,
+                            "name": "Identifier",
+                            "src": "192:1:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 930,
+                              "type": "uint256",
+                              "value": "b"
+                            },
+                            "id": 936,
+                            "name": "Identifier",
+                            "src": "196:1:3"
+                          }
+                        ],
+                        "id": 937,
+                        "name": "BinaryOperation",
+                        "src": "192:5:3"
+                      },
+                      {
+                        "attributes": {
+                          "functionReturnParameters": 934
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 930,
+                              "type": "uint256",
+                              "value": "b"
+                            },
+                            "id": 938,
+                            "name": "Identifier",
+                            "src": "206:1:3"
+                          }
+                        ],
+                        "id": 939,
+                        "name": "Return",
+                        "src": "199:8:3"
+                      }
+                    ],
+                    "id": 940,
+                    "name": "IfStatement",
+                    "src": "189:18:3"
+                  },
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 934
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "overloadedDeclarations": [
+                            null
+                          ],
+                          "referencedDeclaration": 928,
+                          "type": "uint256",
+                          "value": "a"
+                        },
+                        "id": 941,
+                        "name": "Identifier",
+                        "src": "225:1:3"
+                      }
+                    ],
+                    "id": 942,
+                    "name": "Return",
+                    "src": "218:8:3"
+                  }
+                ],
+                "id": 943,
+                "name": "Block",
+                "src": "178:56:3"
+              }
+            ],
+            "id": 944,
+            "name": "FunctionDefinition",
+            "src": "108:126:3"
+          }
+        ],
+        "id": 945,
+        "name": "ContractDefinition",
+        "src": "27:209:3"
+      }
+    ],
+    "id": 946,
+    "name": "SourceUnit",
+    "src": "1:236:3"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-03-20T18:16:27.436Z"
+}
