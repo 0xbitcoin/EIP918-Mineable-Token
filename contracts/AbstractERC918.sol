@@ -20,9 +20,6 @@ pragma solidity ^0.4.18;
     // cumulative counter of the total minted tokens
     uint public tokensMinted;
     
-    // balances of 
-    mapping(address => uint) balances;
-    
     // track read only minting statistics
     struct Statistics {
         address lastRewardTo;

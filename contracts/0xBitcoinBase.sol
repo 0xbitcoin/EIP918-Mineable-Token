@@ -44,6 +44,8 @@ contract _0xBitcoinBase is AbstractERC918, EIP20Interface {
     uint public QUOTIENT_LIMIT = TARGET_DIVISOR.div(2);
     mapping(bytes32 => bytes32) solutionForChallenge;
     mapping(address => mapping(address => uint)) allowed;
+    // balances of 
+    mapping(address => uint) balances;
     
     /**
      * Constructor function
