@@ -15,7 +15,7 @@ A specification for a standardized Mineable Token that uses a Proof of Work algo
 
 ### Motivation
 
-Token distribution via ICO is at best full of scams at and worst totally illegal.  Furthermore, new token projects are all centralized because a single entity must handle and control all of the initial coins and all of the the raised ICO money.  By distribution tokens via mining, the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.'  This means projects incorporating tokens can now be completely decentralized like the Bitcoin community and Ethereum development community.
+Token distribution via ICO is at best full of scams at and worst totally illegal.  Furthermore, new token projects are all centralized because a single entity must handle and control all of the initial coins and all of the the raised ICO money.  By distribution tokens via an Initial Mining Offering (known asan IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' Furthermore, investor risk is significantly diminished.  Projects incorporating tokens can now be completely decentralized like the Bitcoin community and Ethereum development community.  Finally, the IMO mining period may last as short as one month or even one day, that is up to the deployer.  
 
 
 
