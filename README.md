@@ -8,7 +8,9 @@ https://github.com/ethereum/EIPs/pull/918
 
     EIP: <to be assigned>
     Title: Mineable Token Standard
-    Authors: Infernal_toast <admin@0xbitcoin.org>, Jay Logelin <jlogelin@fas.harvard.edu>, Michael Seiler <mgs33@cornell.edu>
+    Authors: Infernal_toast <admin@0xbitcoin.org>
+             Jay Logelin <jlogelin@fas.harvard.edu>
+             Michael Seiler <mgs33@cornell.edu>
     Type: Standard
     Category: ERC
     Status: Draft
@@ -60,34 +62,33 @@ Returns a flag indicating a successful hash digest verification. In order to pre
 
 The mint operation exists as a public function that invokes 4 separate phases, represented as internal functions \_hash, \_reward, \_newEpoch, and \_adjustDifficulty. In order to create the most flexible implementation while adhering to a necessary contract protocol, it is recommended that token implementors override the internal methods, allowing the base contract to handle their execution via mint.
 
+This externally facing function is called by miners to validate challenge digests, calculate reward,
+populate statistics, mutate epoch variables and adjust the solution difficulty as required. Once complete,
+a Mint event is emitted before returning a boolean success flag.
+
 ``` js
-    /*
-     * Externally facing mint function that is called by miners to validate challenge digests, calculate reward,
-     * populate statistics, mutate epoch variables and adjust the solution difficulty as required. Once complete,
-     * a Mint event is emitted before returning a success indicator.
-     **/
-    function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
-        // perform the hash function validation
-        _hash(nonce, challenge_digest);
-        
-        // calculate the current reward
-        uint rewardAmount = _reward();
-        
-        // increment the minted tokens amount
-        tokensMinted += rewardAmount;
-        
-        uint epochCount = _newEpoch(nonce);
-        
-        _adjustDifficulty();
-        
-         //populate read only diagnostics data
-        statistics = Statistics(msg.sender, rewardAmount, block.number, now);
-       
-        // send Mint event indicating a successful implementation
-        Mint(msg.sender, rewardAmount, epochCount, challengeNumber);
-        
-        return true;
-    }
+function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
+    // perform the hash function validation
+    _hash(nonce, challenge_digest);
+    
+    // calculate the current reward
+    uint rewardAmount = _reward();
+    
+    // increment the minted tokens amount
+    tokensMinted += rewardAmount;
+    
+    uint epochCount = _newEpoch(nonce);
+    
+    _adjustDifficulty();
+    
+     //populate read only diagnostics data
+    statistics = Statistics(msg.sender, rewardAmount, block.number, now);
+   
+    // send Mint event indicating a successful implementation
+    Mint(msg.sender, rewardAmount, epochCount, challengeNumber);
+    
+    return true;
+}
 ```
 
 ##### *Mint Event*
@@ -157,14 +158,14 @@ function getMiningReward() public constant returns (uint)
 
 ### Example mining function
 A general mining function written in python for finding a valid nonce is as follows: 
-
-    def mine(challenge, public_address, difficulty):
-      while True:
-        nonce = generate_random_number()
-        hash1 = int(sha3.keccak_256(challenge+public_address+nonce).hexdigest(), 16)
-        if hash1 < difficulty:
-          return nonce, hash1
-
+```
+def mine(challenge, public_address, difficulty):
+  while True:
+    nonce = generate_random_number()
+    hash1 = int(sha3.keccak_256(challenge+public_address+nonce).hexdigest(), 16)
+    if hash1 < difficulty:
+      return nonce, hash1
+```
 
 Once the nonce and hash1 are found, these are used to call the mint() function of the smart contract to receive a reward of tokens.
 
