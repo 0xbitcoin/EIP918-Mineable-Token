@@ -26,7 +26,7 @@ The most important method for EIP918 is mint() for the token distribution and it
 
      uint challengeNumber = block.blockhash(block.number - 1);
      uint miningTarget = 2**224;
-     epochCount = 0;
+     uint epochCount = 0;
 
      function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) { 
                  
@@ -82,11 +82,11 @@ The most important method for EIP918 is mint() for the token distribution and it
 
 A general mining function written in python for finding a valid nonce is as follows: 
 
-    def mine(challenge, public_address, difficulty):
+    def mine(challenge, public_address, difficulty_target):
       while True:
         nonce = generate_random_number()
         hash1 = int(sha3.keccak_256(challenge+public_address+nonce).hexdigest(), 16)
-        if hash1 < difficulty:
+        if hash1 < difficulty_target:
           return nonce, hash1
 
 
