@@ -82,9 +82,15 @@ The most important method for EIP918 is mint() for the token distribution and it
 
 A general mining function written in python for finding a valid nonce is as follows: 
 
---ADD ME --
+    def mine(challenge, public_address, difficulty):
+      while True:
+        nonce = generate_random_number()
+        hash1 = int(sha3.keccak_256(challenge+public_address+nonce).hexdigest(), 16)
+        if hash1 < difficulty:
+          return nonce, hash1
 
 
+Once the nonce and hash1 are found, these are used to call the mint() function of the smart contract to receive a reward of tokens.
 
 ### Rationale
 (The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.)
