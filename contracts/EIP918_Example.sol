@@ -16,7 +16,7 @@ import "./ExtendedMath.sol";
 import "./Owned.sol";
 
 
-contract EIP918 is EIP918Interface,EIP20Interface, Owned {
+contract EIP918_Token_Sample is EIP918Interface,EIP20Interface, Owned {
 
     using SafeMath for uint;
     using ExtendedMath for uint;
@@ -96,7 +96,7 @@ contract EIP918 is EIP918Interface,EIP20Interface, Owned {
 
         // ------------------------------------------------------------------------
 
-        function _MintedToken() public onlyOwner{
+        function EIP918_Token_Sample() public onlyOwner{
 
 
 
