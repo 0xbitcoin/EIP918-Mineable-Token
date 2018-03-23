@@ -1,5 +1,5 @@
 /*
-Implements EIP541 token standard: https://github.com/0xbitcoin/ERC541-Spec/blob/master/contracts/EIP541.sol
+Implements EIP918 token standard 
 .*/
 
 
@@ -16,7 +16,7 @@ import "./ExtendedMath.sol";
 import "./Owned.sol";
 
 
-contract EIP541 is EIP541Interface, Owned {
+contract EIP918 is EIP918Interface, Owned {
 
     using SafeMath for uint;
     using ExtendedMath for uint;
