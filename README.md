@@ -67,6 +67,19 @@ populate statistics, mutate epoch variables and adjust the solution difficulty a
 a Mint event is emitted before returning a boolean success flag.
 
 ``` js
+// cumulative counter of the total minted tokens
+uint public tokensMinted;
+    
+// track read only minting statistics
+struct Statistics {
+    address lastRewardTo;
+    uint lastRewardAmount;
+    uint lastRewardEthBlockNumber;
+    uint lastRewardTimestamp;
+}
+
+Statistics public statistics;
+
 function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
     // perform the hash function validation
     _hash(nonce, challenge_digest);
