@@ -10,16 +10,16 @@ import "./ExtendedMath.sol";
 import "./Owned.sol";
 
 /**
-* _0xBitcoinBase Implementation used for creating ERC918, ERC20 mineable tokens using the same difficulty
-* adjustment, reward and hashing features of 0xBitcoin
-*
-* This complex contract implements a minimal set of behaviors (hash, reward, epoch, and difficulty adjustment) 
-* and state required to build a Proof of Work driven mineable token. Refactoring of 0xBitcoin base code to be
-* used for implementing 0xbitcoin based mineable tokens
-* 
-* https://github.com/ethereum/EIPs/pull/918
-* https://github.com/0xbitcoin/0xbitcoin-token/blob/master/contracts/_0xBitcoinToken.sol
-*/
+ * _0xBitcoinBase Implementation used for creating ERC918, ERC20 mineable tokens using the same difficulty
+ * adjustment, reward and hashing features of 0xBitcoin
+ *
+ * This complex contract implements a minimal set of behaviors (hash, reward, epoch, and difficulty adjustment) 
+ * and state required to build a Proof of Work driven mineable token. Refactoring of 0xBitcoin base code to be
+ * used for implementing 0xbitcoin based mineable tokens
+ * 
+ * https://github.com/ethereum/EIPs/pull/918
+ * https://github.com/0xbitcoin/0xbitcoin-token/blob/master/contracts/_0xBitcoinToken.sol
+ */
 contract _0xBitcoinBase is AbstractERC918, EIP20Interface {
     using SafeMath for uint;
     using ExtendedMath for uint;
