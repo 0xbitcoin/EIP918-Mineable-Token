@@ -17,10 +17,8 @@ A specification for a standardized Mineable Token that uses a Proof of Work algo
 
 Token distribution via ICO is at best full of scams at and worst totally illegal.  Furthermore, new token projects are all centralized because a single entity must handle and control all of the initial coins and all of the the raised ICO money.  By distribution tokens via an Initial Mining Offering (known as an IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' Furthermore, investor risk exposure is significantly diminished.  Projects incorporating ERC20/ERC721 tokens can now be completely decentralized like the Bitcoin community and Ethereum development community.   
 
-
---Complete the Below--
-(The IMO mining period may last as short as one month or even one day, that is up to the deployer.   )
-
+ 
+ 
 ### Specification
  
 The most important method for EIP918 is mint() for the token distribution and it is incorporated as follows for a SHA3 algorithm: 
@@ -45,7 +43,7 @@ The most important method for EIP918 is mint() for the token distribution and it
                  solutionForChallenge[challengeNumber] = digest;
                  if(solution != 0x0) revert();  
                 
-                 //need to implement a custom method for number of tokens to reward for a mint
+                 //implement a custom method for number of tokens to reward for a mint
                  uint rewardAmount = getMiningReward();
                 
                  //use safe math to add tokens to the miners account
@@ -73,6 +71,12 @@ The most important method for EIP918 is mint() for the token distribution and it
            
            function getMiningTarget() public constant returns (uint) {
              return miningTarget;
+           }
+           
+           
+           function getMiningReward() public constant returns (uint) {
+             //Feel free to modify this integer 
+             return 50 * 10**uint(decimals);
            }
    
 
