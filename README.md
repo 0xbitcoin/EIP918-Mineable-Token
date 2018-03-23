@@ -11,7 +11,7 @@ A specification for a standardized Mineable Token that uses a Proof of Work algo
 
 ### Abstract
 
- This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet.  This mint() function typically requires a Proof of Work algorithm in order to minimize gas fees. Standardized CPU and GPU token mining software exists.
+ This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet.  This mint() function uses a Proof of Work algorithm in order to minimize gas fees and control the distribution rate. Standardized CPU and GPU token mining software exists.
 
 ### Motivation
 
