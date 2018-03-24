@@ -96,6 +96,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
     
      //populate read only diagnostics data
     statistics = Statistics(msg.sender, rewardAmount, block.number, now);
+ 
    
     // send Mint event indicating a successful implementation
     Mint(msg.sender, rewardAmount, epochCount, challengeNumber);
@@ -135,9 +136,9 @@ Internal interface function \_newEpoch, meant to be overridden in implementation
 ``` js
 function _newEpoch(uint256 nonce) internal returns (uint);
 ```
-
+ 
 #### \_adjustDifficulty
-
+ 
 Internal interface function \_adjustDifficulty, meant to be overridden in implementation to adjust the difficulty (via field difficulty) of the mining as required
 
 ``` js
