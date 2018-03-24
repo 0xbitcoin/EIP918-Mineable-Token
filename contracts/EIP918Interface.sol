@@ -14,5 +14,8 @@ contract EIP918Interface  {
   function getMiningTarget() public constant returns (uint);
 
   function getMiningReward() public constant returns (uint);
+ 
+  event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
+
 
 }
