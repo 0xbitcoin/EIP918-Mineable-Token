@@ -1,5 +1,7 @@
 pragma solidity ^0.4.18;
 
+import "./EIP918Interface.sol";
+
 /**
  * ERC Draft Token Standard #918 Interface
  * Proof of Work Mineable Token
@@ -9,7 +11,7 @@ pragma solidity ^0.4.18;
  * 
  * https://github.com/ethereum/EIPs/pull/918
  */
- contract AbstractERC918 {
+ contract AbstractERC918 is EIP918Interface {
      
     // generate a new challenge number after a new reward is minted
     bytes32 public challengeNumber;

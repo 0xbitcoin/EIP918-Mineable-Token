@@ -3,7 +3,7 @@
 pragma solidity ^0.4.18;
  
 
-contract EIP918Interface  {
+interface EIP918Interface  {
 
   function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success);
 
