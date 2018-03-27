@@ -22,7 +22,35 @@ This specification describes a method for initially locking tokens within a toke
 Token distribution via the ICO model and it's derivatives is susceptable to illicit behavior by human actors. Furthermore, new token projects are centralized because a single entity must handle and control all of the initial coins and all of the the raised ICO money.  By distributing tokens via an Initial Mining Offering (known as an IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' As a result, investor risk exposure utilizing a mined token distribution model is significantly diminished. This standard is intended to be standalone, allowing maximum interoperability with ERC20, ERC721, and others.
 
 ### Specification
- 
+
+#### Interface
+The general behavioral specification includes a primary function that defines the token minting operation, an optional merged minting operation for issuing multiple tokens, getters for challenge number, mining difficulty, mining target and current reward, and finally a Mint event, to be emitted upon successful solution validation and token issuance. At a minimum, contracts must adhere to this interface (save the optional merge operation). It is recommended that contracts interface with the more behaviorally defined Abstract Contract described below, in order to leverage a more defined construct, allowing for easier external implementations via overridden phased functions. (see 'Abstract Contract' below)
+
+``` js
+interface EIP918Interface  {
+
+    function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success);
+
+    function getChallengeNumber() public constant returns (bytes32);
+    
+    function getMiningDifficulty() public constant returns (uint);
+
+    function getMiningTarget() public constant returns (uint);
+
+    function getMiningReward() public constant returns (uint);
+    
+    event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
+    
+    // Optional
+    function merge(uint256 nonce, bytes32 challenge_digest, address[] mineTokens) public returns (bool success);
+
+}
+```
+
+#### Abstract Contract
+
+The Abstract Contract adheres to the EIP918 Interface and extends behavioral definition through the introduction of 4 internal phases of token mining and minting: hash, reward, epoch and adjust difficulty, all called during the mint() operation. This construct provides a balance between being too general for use while providing amply room for multiple mined implementation types.
+
 ### Fields
 
 #### challengeNumber
@@ -187,7 +215,7 @@ Once the nonce and hash1 are found, these are used to call the mint() function o
 
 ### Rationale
 
-A keccak256 algoritm does not have to be used, but it is used in this case since it is a cost effective one-way algorithm to perform in the EVM and simple to perform in solidity.  The nonce is the solution that miners try to find and so it is part of the hashing algorithm.  A challengeNumber is also part of the hash so that future blocks cannot be mined since it acts like a random piece of data that is not revealed until a mining round starts.  The msg.sender address is part of the hash so that a nonce solution is valid only for a particular Ethereum account and so the solution is not susceptible to man-in-the-middle attacks.  This also allows pools to operate without being easily cheated by the miners since pools can force miners to mine using the pool's address in the hash algo.  
+A keccak256 algoritm does not have to be used, but it is recommended since it is a cost effective one-way algorithm to perform in the EVM and simple to perform in solidity.  The nonce is the solution that miners try to find and so it is part of the hashing algorithm.  A challengeNumber is also part of the hash so that future blocks cannot be mined since it acts like a random piece of data that is not revealed until a mining round starts.  The msg.sender address is part of the hash so that a nonce solution is valid only for a particular Ethereum account and so the solution is not susceptible to man-in-the-middle attacks.  This also allows pools to operate without being easily cheated by the miners since pools can force miners to mine using the pool's address in the hash algo.  
 
 One community concern for mined tokens has been a concern of energy use without a function for securing a network.  Although token mining does not secure a network, it does secure a community from corruption since it eliminates monarchs and eliminates ICOs.  Furthermore, an IMO (initial mining offering) may last as little as a week, a day, or an hour at which point all of the tokens have been minted.  
 
