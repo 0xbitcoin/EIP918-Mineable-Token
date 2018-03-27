@@ -202,9 +202,11 @@ Backwards incompatibilities are not introduced.
 ### Implementation
 
 Simple Example:
+
 https://github.com/0xbitcoin/EIP918-Mineable-Token/blob/master/contracts/SimpleERC918.sol
 
 Complex Examples:
+
 https://github.com/0xbitcoin/EIP918-Mineable-Token/blob/master/contracts/0xdogeExample.sol
 https://github.com/0xbitcoin/EIP918-Mineable-Token/blob/master/contracts/0xdogeExample2.sol
 https://github.com/0xbitcoin/EIP918-Mineable-Token/blob/master/contracts/0xBitcoinBase.sol
