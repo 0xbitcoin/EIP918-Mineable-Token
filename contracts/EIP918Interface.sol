@@ -2,7 +2,21 @@ pragma solidity ^0.4.18;
 
 interface EIP918Interface  {
 
+    /*
+     * Externally facing mint function that is called by miners to validate challenge digests, calculate reward,
+     * populate statistics, mutate epoch variables and adjust the solution difficulty as required. Once complete,
+     * a Mint event is emitted before returning a success indicator.
+     **/
   	function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success);
+
+    /*
+     * Optional
+     * Externally facing merge function that is called by miners to validate challenge digests, calculate reward,
+     * populate statistics, mutate epoch variables and adjust the solution difficulty as required. Additionally, the
+     * merge function takes an array of target token addresses to be used in merged rewards. Once complete,
+     * a Mint event is emitted before returning a success indicator.
+     **/
+    function merge(uint256 nonce, bytes32 challenge_digest, address[] mineTokens) public returns (bool success);
 
 	/*
      * Returns the challenge number
