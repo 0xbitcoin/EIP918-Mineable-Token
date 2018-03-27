@@ -4,18 +4,18 @@
 pull request:
 https://github.com/ethereum/EIPs/pull/918
 
-# Preamble
+---------------------------- Document starts here --------------------------------
 
-    EIP: <to be assigned>
-    Title: Mineable Token Standard
-    Authors: Infernal_toast <admin@0xbitcoin.org>
-             Jay Logelin <jlogelin@fas.harvard.edu>
-             Michael Seiler <mgs33@cornell.edu>
-    Type: Standard
-    Category: ERC
-    Status: Draft
-    Created: 2018-03-07
-    Requires: None
+---
+eip: <to be assigned>
+title: Mineable Token Standard
+author: Jay Logelin <jlogelin@fas.harvard.edu>, Infernal_toast <admin@0xbitcoin.org>, Michael Seiler <mgs33@cornell.edu>
+discussions-to: jlogelin@fas.harvard.edu
+status: Draft
+type: Standards Track
+category ERC
+created: 2018-03-07
+---
  
 ### Simple Summary
 
