@@ -1,11 +1,3 @@
-## ERC Mineable Token Specification
-#### This Specification has been moved to Ethereum EIP for Draft Review:
-
-pull request:
-https://github.com/ethereum/EIPs/pull/918
-
----------------------------- Document starts here --------------------------------
-
 ---
 eip: <to be assigned>
 title: Mineable Token Standard
