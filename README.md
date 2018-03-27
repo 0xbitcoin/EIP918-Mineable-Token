@@ -186,14 +186,12 @@ def mine(challenge, public_address, difficulty):
 Once the nonce and hash1 are found, these are used to call the mint() function of the smart contract to receive a reward of tokens.
 
 ### Rationale
-(The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.)
 
 A keccak256 algoritm does not have to be used, but it is used in this case since it is a cost effective one-way algorithm to perform in the EVM and simple to perform in solidity.  The nonce is the solution that miners try to find and so it is part of the hashing algorithm.  A challengeNumber is also part of the hash so that future blocks cannot be mined since it acts like a random piece of data that is not revealed until a mining round starts.  The msg.sender address is part of the hash so that a nonce solution is valid only for a particular Ethereum account and so the solution is not susceptible to man-in-the-middle attacks.  This also allows pools to operate without being easily cheated by the miners since pools can force miners to mine using the pool's address in the hash algo.  
 
 One community concern for mined tokens has been a concern of energy use without a function for securing a network.  Although token mining does not secure a network, it does secure a community from corruption since it eliminates monarchs and eliminates ICOs.  Furthermore, an IMO (initial mining offering) may last as little as a week, a day, or an hour at which point all of the tokens have been minted.  
 
 ### Backwards Compatibility
-(All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions without a sufficient backwards compatibility treatise may be rejected outright.)
 
 Backwards incompatibilities are not introduced.  
 
@@ -202,13 +200,23 @@ Backwards incompatibilities are not introduced.
 
 
 ### Implementation
-(The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.)
+
+Simple Example:
+https://github.com/0xbitcoin/EIP918-Mineable-Token/blob/master/contracts/SimpleERC918.sol
+
+Complex Examples:
+https://github.com/0xbitcoin/EIP918-Mineable-Token/blob/master/contracts/0xdogeExample.sol
+https://github.com/0xbitcoin/EIP918-Mineable-Token/blob/master/contracts/0xdogeExample2.sol
+https://github.com/0xbitcoin/EIP918-Mineable-Token/blob/master/contracts/0xBitcoinBase.sol
 
 0xBitcoin Token Contract: 
 https://etherscan.io/address/0xb6ed7644c69416d67b522e20bc294a9a9b405b31
 
 MVI OpenCL Token Miner 
 https://github.com/mining-visualizer/MVis-tokenminer/releases
+
+PoWAdv Token Contract:
+https://etherscan.io/address/0x1a136ae98b49b92841562b6574d1f3f5b0044e4c
 
 
 ### Copyright
