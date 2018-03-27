@@ -15,11 +15,11 @@ A specification for a standardized Mineable Token that uses a Proof of Work algo
 
 ### Abstract
 
-This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet. This mint() function uses a Proof of Work algorithm in order to minimize gas fees and control the distribution rate. Standardized CPU and GPU token mining software exists.
+This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet. This mint() function uses a Proof of Work algorithm in order to minimize gas fees and control the distribution rate. Additionally, standardization of mineable tokens will give rise to standardized CPU and GPU token mining software, token mining pools and other external tools in the token mining ecosystem.
 
 ### Motivation
 
-Token distribution via the ICO model and it's derivatives is susceptable to illicit behavior by human actors. Furthermore, new token projects are centralized because a single entity must handle and control all of the initial coins and all of the the raised ICO money.  By distributing tokens via an Initial Mining Offering (known as an IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' As a result, investor risk exposure utilizing a mined token distribution model is significantly diminished. This standard is intended to be standalone, allowing maximum interoperability with ERC20, ERC721, and others.
+Token distribution via the ICO model and it's derivatives is susceptable to illicit behavior by human actors. Furthermore, new token projects are centralized because a single entity must handle and control all of the initial coins and all of the the raised ICO money.  By distributing tokens via an 'Initial Mining Offering' (or IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' As a result, investor risk exposure utilizing a mined token distribution model is significantly diminished. This standard is intended to be standalone, allowing maximum interoperability with ERC20, ERC721, and others.
 
 ### Specification
 
@@ -201,7 +201,7 @@ function getMiningReward() public constant returns (uint)
 ```
 
 ### Example mining function
-A general mining function written in python for finding a valid nonce is as follows: 
+A general mining function written in python for finding a valid nonce for mined token 0xbitcoin, is as follows: 
 ```
 def mine(challenge, public_address, difficulty):
   while True:
@@ -215,9 +215,12 @@ Once the nonce and hash1 are found, these are used to call the mint() function o
 
 ### Rationale
 
-A keccak256 algoritm does not have to be used, but it is recommended since it is a cost effective one-way algorithm to perform in the EVM and simple to perform in solidity.  The nonce is the solution that miners try to find and so it is part of the hashing algorithm.  A challengeNumber is also part of the hash so that future blocks cannot be mined since it acts like a random piece of data that is not revealed until a mining round starts.  The msg.sender address is part of the hash so that a nonce solution is valid only for a particular Ethereum account and so the solution is not susceptible to man-in-the-middle attacks.  This also allows pools to operate without being easily cheated by the miners since pools can force miners to mine using the pool's address in the hash algo.  
+A keccak256 algoritm does not have to be used, but it is recommended since it is a cost effective one-way algorithm to perform in the EVM and simple to perform in solidity. The nonce is the solution that miners try to find and so it is part of the hashing algorithm. A challengeNumber is also part of the hash so that future blocks cannot be mined since it acts like a random piece of data that is not revealed until a mining round starts. The msg.sender address is part of the hash so that a nonce solution is valid only for a particular Ethereum account and so the solution is not susceptible to man-in-the-middle attacks. This also allows pools to operate without being easily cheated by the miners since pools can force miners to mine using the pool's address in the hash algo.  
 
-One community concern for mined tokens has been a concern of energy use without a function for securing a network.  Although token mining does not secure a network, it does secure a community from corruption since it eliminates monarchs and eliminates ICOs.  Furthermore, an IMO (initial mining offering) may last as little as a week, a day, or an hour at which point all of the tokens have been minted.  
+The economics of transferring electricity and hardware into mined token assets offers a flourishing community of decentralized miners the option to be involved in the Ethereum token economy directly. By voting with hashpower, an economically pegged asset to real-world resources, miners are incentivized to participate in early token trade to revamp initial costs, providing a bootstrapped stimulus mechanism between miners and early investors.
+
+One community concern for mined tokens has been around energy use without a function for securing a network.  Although token mining does not secure a network, it serves the function of securing a community from corruption as it offers an alternative to centralized ICOs. Furthermore, an initial mining offering may last as little as a week, a day, or an hour at which point all of the tokens would have been minted.
+
 
 ### Backwards Compatibility
 
