@@ -58,7 +58,7 @@ uint public tokensMinted;
 
 #### mint
 
-Returns a flag indicating a successful hash digest verification. In order to prevent MiTM attacks, it is recommended that the digest include a recent ethereum block hash and msg.sender's address. Once verified, the mint function calculates and delivers a mining reward to the sender and performs internal accounting operations on the contract's supply.
+Returns a flag indicating a successful hash digest verification, and reward allocation to msg.sender. In order to prevent MiTM attacks, it is recommended that the digest include a recent ethereum block hash and msg.sender's address. Once verified, the mint function calculates and delivers a mining reward to the sender and performs internal accounting operations on the contract's supply.
 
 The mint operation exists as a public function that invokes 4 separate phases, represented as internal functions \_hash, \_reward, \_newEpoch, and \_adjustDifficulty. In order to create the most flexible implementation while adhering to a necessary contract protocol, it is recommended that token implementors override the internal methods, allowing the base contract to handle their execution via mint.
 
@@ -111,6 +111,16 @@ Upon successful verification and reward the mint method dispatches a Mint Event 
 
 ``` js
 event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
+```
+
+#### merge
+
+*Optional*
+
+Operationally similar to mint, except the merge function offers a list of token target addresses intended to be used to merge multiple token rewards.
+
+``` js
+function merge(uint256 nonce, bytes32 challenge_digest, address[] mineTokens) public returns (bool success);
 ```
 
 #### \_hash
