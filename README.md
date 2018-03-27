@@ -1,11 +1,11 @@
 ---
 eip: <to be assigned>
 title: Mineable Token Standard
-author: Jay Logelin <jlogelin@fas.harvard.edu>, Infernal_toast <admin@0xbitcoin.org>, Michael Seiler <mgs33@cornell.edu>
-discussions-to: jlogelin@fas.harvard.edu
+author: Jay Logelin, Infernal_toast, Michael Seiler
+discussions-to: jlogelin@fas.harvard.edu, admin@0xbitcoin.org, mgs33@cornell.edu
 status: Draft
 type: Standards Track
-category ERC
+category: ERC
 created: 2018-03-07
 ---
  
