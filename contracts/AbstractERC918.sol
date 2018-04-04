@@ -1,5 +1,7 @@
 pragma solidity ^0.4.18;
 
+import "./EIP918Interface.sol";
+
 /**
  * ERC Draft Token Standard #918 Interface
  * Proof of Work Mineable Token
@@ -9,7 +11,7 @@ pragma solidity ^0.4.18;
  * 
  * https://github.com/ethereum/EIPs/pull/918
  */
- contract AbstractERC918 {
+ contract AbstractERC918 is EIP918Interface {
      
     // generate a new challenge number after a new reward is minted
     bytes32 public challengeNumber;
@@ -82,31 +84,4 @@ pragma solidity ^0.4.18;
      **/
     function _adjustDifficulty() internal returns (uint);
 
-    /*
-     * Returns the challenge number
-     **/
-    function getChallengeNumber() public constant returns (bytes32);
-
-    /*
-     * Returns the mining difficulty. The number of digits that the digest of the PoW solution requires which 
-     * typically auto adjusts during reward generation.
-     **/
-    function getMiningDifficulty() public constant returns (uint);
-
-    /*
-     * Returns the mining target
-     **/
-    function getMiningTarget() public constant returns (uint);
-
-    /*
-     * Return the current reward amount. Depending on the algorithm, typically rewards are divided every reward era 
-     * as tokens are mined to provide scarcity
-     **/
-    function getMiningReward() public constant returns (uint);
-    
-    /*
-     * Upon successful verification and reward the mint method dispatches a Mint Event indicating the reward address, 
-     * the reward amount, the epoch count and newest challenge number.
-     **/
-    event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
 }
