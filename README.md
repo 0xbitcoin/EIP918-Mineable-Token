@@ -9,6 +9,9 @@ category: ERC
 created: 2018-03-07
 ---
  
+ https://github.com/ethereum/EIPs/pull/918
+ 
+ 
 ### Simple Summary
 
 A specification for a standardized Mineable Token that uses a Proof of Work algorithm for distribution. 
