@@ -1,16 +1,21 @@
-Simple Summary
-A specification for a standardized Mineable Token that uses a Proof of Work algorithm for distribution.
+### Simple Summary
 
-Abstract
+A specification for a standardized Mineable Token that uses a Proof of Work algorithm for distribution. 
+
+### Abstract
+
 This specification describes a method for initially locking tokens within a token contract and slowly dispensing them with a mint() function which acts like a faucet. This mint() function uses a Proof of Work algorithm in order to minimize gas fees and control the distribution rate. Additionally, standardization of mineable tokens will give rise to standardized CPU and GPU token mining software, token mining pools and other external tools in the token mining ecosystem.
 
-Motivation
-Token distribution via the ICO model and its derivatives is susceptible to illicit behavior by human actors. Furthermore, new token projects are centralized because a single entity must handle and control all of the initial coins and all of the raised ICO money. By distributing tokens via an 'Initial Mining Offering' (or IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' As a result, investor risk exposure utilizing a mined token distribution model is significantly diminished. This standard is intended to be standalone, allowing maximum interoperability with ERC20, ERC721, and others.
+### Motivation
 
-Specification
-Interface
+Token distribution via the ICO model and its derivatives is susceptible to illicit behavior by human actors. Furthermore, new token projects are centralized because a single entity must handle and control all of the initial coins and all of the raised ICO money.  By distributing tokens via an 'Initial Mining Offering' (or IMO), the ownership of the token contract no longer belongs with the deployer at all and the deployer is 'just another user.' As a result, investor risk exposure utilizing a mined token distribution model is significantly diminished. This standard is intended to be standalone, allowing maximum interoperability with ERC20, ERC721, and others.
+
+### Specification
+
+#### Interface
 The general behavioral specification includes a primary function that defines the token minting operation, an optional merged minting operation for issuing multiple tokens, getters for challenge number, mining difficulty, mining target and current reward, and finally a Mint event, to be emitted upon successful solution validation and token issuance. At a minimum, contracts must adhere to this interface (save the optional merge operation). It is recommended that contracts interface with the more behaviorally defined Abstract Contract described below, in order to leverage a more defined construct, allowing for easier external implementations via overridden phased functions. (see 'Abstract Contract' below)
 
+``` solidity
 contract ERC918  {
    
    function mint(uint256 nonce) public returns (bool success);
@@ -35,38 +40,62 @@ contract ERC918  {
 
    event Mint(address indexed from, uint rewardAmount, uint epochCount, bytes32 newChallengeNumber);
 }
-Abstract Contract
+```
+
+#### Abstract Contract
+
 The Abstract Contract adheres to the EIP918 Interface and extends behavioral definition through the introduction of 4 internal phases of token mining and minting: hash, reward, epoch and adjust difficulty, all called during the mint() operation. This construct provides a balance between being too general for use while providing ample room for multiple mined implementation types.
 
-Fields
-adjustmentInterval
+### Fields
+
+#### adjustmentInterval
 The amount of time between difficulty adjustments in seconds.
 
+``` solidity
 bytes32 public adjustmentInterval;
-challengeNumber
+```
+
+#### challengeNumber
 The current challenge number. It is expected tha a new challenge number is generated after a new reward is minted.
 
+``` solidity
 bytes32 public challengeNumber;
-difficulty
-The current mining difficulty which should be adjusted via the _adjustDifficulty minting phase
+```
 
+#### difficulty
+The current mining difficulty which should be adjusted via the \_adjustDifficulty minting phase
+
+``` solidity
 uint public difficulty;
-tokensMinted
-Cumulative counter of the total minted tokens, usually modified during the _reward phase
+```
 
+#### tokensMinted
+Cumulative counter of the total minted tokens, usually modified during the \_reward phase
+
+``` solidity
 uint public tokensMinted;
-epochCount
+```
+
+#### epochCount
 Number of 'blocks' mined
 
+``` solidity
 uint public epochCount;
-Mining Operations
-mint
+```
+
+### Mining Operations
+
+#### mint
+
 Returns a flag indicating a successful hash digest verification, and reward allocation to msg.sender. In order to prevent MiTM attacks, it is recommended that the digest include a recent Ethereum block hash and msg.sender's address. Once verified, the mint function calculates and delivers a mining reward to the sender and performs internal accounting operations on the contract's supply.
 
-The mint operation exists as a public function that invokes 4 separate phases, represented as functions hash, _reward, _newEpoch, and _adjustDifficulty. In order to create the most flexible implementation while adhering to a necessary contract protocol, it is recommended that token implementors override the internal methods, allowing the base contract to handle their execution via mint.
+The mint operation exists as a public function that invokes 4 separate phases, represented as functions hash, \_reward, \_newEpoch, and \_adjustDifficulty. In order to create the most flexible implementation while adhering to a necessary contract protocol, it is recommended that token implementors override the internal methods, allowing the base contract to handle their execution via mint.
 
-This externally facing function is called by miners to validate challenge digests, calculate reward, populate statistics, mutate epoch variables and adjust the solution difficulty as required. Once complete, a Mint event is emitted before returning a boolean success flag.
+This externally facing function is called by miners to validate challenge digests, calculate reward,
+populate statistics, mutate epoch variables and adjust the solution difficulty as required. Once complete,
+a Mint event is emitted before returning a boolean success flag.
 
+``` solidity
 contract AbstractERC918 is EIP918Interface {
 
     // the amount of time between difficulty adjustments
@@ -117,45 +146,83 @@ contract AbstractERC918 is EIP918Interface {
         return true;
     }
 }
-Mint Event
+```
+
+##### *Mint Event*
+
 Upon successful verification and reward the mint method dispatches a Mint Event indicating the reward address, the reward amount, the epoch count and newest challenge number.
 
+``` solidity
 event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
-hash
+```
+
+#### hash
+
 Public interface function hash, meant to be overridden in implementation to define hashing algorithm and validation. Returns the validated digest
 
+``` solidity
 function hash(uint256 nonce) public returns (bytes32 digest);
-_reward
-Internal interface function _reward, meant to be overridden in implementation to calculate and allocate the reward amount. The reward amount must be returned by this method.
+```
 
+#### \_reward
+
+Internal interface function \_reward, meant to be overridden in implementation to calculate and allocate the reward amount. The reward amount must be returned by this method.
+
+``` solidity
 function _reward() internal returns (uint);
-_newEpoch
-Internal interface function _newEpoch, meant to be overridden in implementation to define a cutpoint for mutating mining variables in preparation for the next phase of mine.
+```
 
+#### \_newEpoch
+
+Internal interface function \_newEpoch, meant to be overridden in implementation to define a cutpoint for mutating mining variables in preparation for the next phase of mine.
+
+``` solidity
 function _newEpoch(uint256 nonce) internal returns (uint);
-_adjustDifficulty
-Internal interface function _adjustDifficulty, meant to be overridden in implementation to adjust the difficulty (via field difficulty) of the mining as required
+```
+ 
+#### \_adjustDifficulty
+ 
+Internal interface function \_adjustDifficulty, meant to be overridden in implementation to adjust the difficulty (via field difficulty) of the mining as required
 
+``` solidity
 function _adjustDifficulty() internal returns (uint);
-getAdjustmentInterval
+```
+
+#### getAdjustmentInterval
+
 The amount of time, in seconds, between difficulty adjustment operations.
 
+``` solidity
 function getAdjustmentInterval() public view returns (uint);
-getChallengeNumber
+```
+
+#### getChallengeNumber
+
 Recent ethereum block hash, used to prevent pre-mining future blocks.
 
+``` solidity
 function getChallengeNumber() public view returns (bytes32);
-getMiningDifficulty
+```
+
+#### getMiningDifficulty
+
 The number of digits that the digest of the PoW solution requires which typically auto adjusts during reward generation.
 
+``` solidity
 function getMiningDifficulty() public view returns (uint)
-getMiningReward
+```
+
+#### getMiningReward
+
 Return the current reward amount. Depending on the algorithm, typically rewards are divided every reward era as tokens are mined to provide scarcity.
 
+``` solidity
 function getMiningReward() public view returns (uint)
-Example mining function
-A general mining function written in python for finding a valid nonce for keccak256 mined token, is as follows:
+```
 
+### Example mining function
+A general mining function written in python for finding a valid nonce for keccak256 mined token, is as follows: 
+``` python
 def generate_nonce():
   myhex =  b'%064x' % getrandbits(32*8)
   return codecs.decode(myhex, 'hex_codec')
@@ -166,11 +233,14 @@ def mine(challenge, public_address, difficulty):
     hash1 = int(sha3.keccak_256(challenge+public_address+nonce).hexdigest(), 16)
     if hash1 < difficulty:
       return nonce, hash1
+```
+
 Once the nonce and hash1 are found, these are used to call the mint() function of the smart contract to receive a reward of tokens.
 
-Merged Mining Extension (Optional)
+### Merged Mining Extension (Optional)
 In order to provide support for merge mining multiple tokens, an optional merged mining extension can be implemented as part of the ERC918 standard. It is important to note that the following function will only properly work if the base contracts use tx.origin instead of msg.sender when applying rewards. If not the rewarded tokens will be sent to the calling contract and not the end user.
 
+``` solidity
 /**
  * @title ERC-918 Mineable Token Standard, optional merged mining functionality
  * @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-918.md
@@ -205,11 +275,13 @@ contract ERC918Merged is AbstractERC918 {
        return merge(_nonce, _mineTokens);
      }
 }
-Delegated Minting Extension (Optional)
+```
+
+### Delegated Minting Extension (Optional)
 In order to facilitate a third party minting submission paradigm, such as the case of miners submitting solutions to a pool operator and/or system, a delegated minting extension can be used to allow pool accounts submit solutions on the behalf of a user, so the miner can avoid directly paying Ethereum transaction costs. This is performed by an off chain mining account packaging and signing a standardized mint solution packet and sending it to a pool or 3rd party to be submitted.
 
 The ERC918 Mineable Mint Packet Metadata should be prepared using following schema:
-
+``` solidity
 {
     "title": "Mineable Mint Packet Metadata",
     "type": "object",
@@ -228,8 +300,10 @@ The ERC918 Mineable Mint Packet Metadata should be prepared using following sche
         }
     }
 }
+```
 The preparation of a mineable mint packet on a JavaScript client would appear as follows:
 
+``` solidity
 function prepareDelegatedMintTxn(nonce, account) {
   var functionSig = web3.utils.sha3("delegatedMintHashing(uint256,address)").substring(0,10)
   var data = web3.utils.soliditySha3( functionSig, nonce, account.address )
@@ -244,16 +318,18 @@ function prepareDelegatedMintTxn(nonce, account) {
   /* todo: send mineableMintPacket to submitter */
   ...
 }
+```
 Once the packet is prepared and formatted it can then be routed to a third party that will submit the transaction to the contract's delegatedMint() function, thereby paying for the transaction gas and receiving the resulting tokens. The pool/third party must then manually payback the minted tokens minus fees to the original minter.
 
 The following code sample exemplifies third party packet relaying:
-
+``` solidity
 //received by minter
 var mineableMintPacket = ...
 var packet = JSON.parse(mineableMintPacket)
 erc918MineableToken.delegatedMint(packet.nonce, packet.origin, packet.signature)
+```
 The Delegated Mint Extension expands upon ERC918 realized as a sub-contract:
-
+``` js
 import 'openzeppelin-solidity/contracts/contracts/cryptography/ECDSA.sol';
 
 contract ERC918DelegatedMint is AbstractERC918, ECDSA {
@@ -281,11 +357,13 @@ contract ERC918DelegatedMint is AbstractERC918, ECDSA {
         return toEthSignedMessageHash(keccak256(abi.encodePacked( bytes4(0x7b36737a), _nonce, _origin)));
     }
 }
-Mineable Token Metadata (Optional)
+```
+
+### Mineable Token Metadata (Optional)
 In order to provide for richer and potentially mutable metadata for a particular Mineable Token, it is more viable to offer an off-chain reference to said data. This requires the implementation of a single interface method 'metadataURI()' that returns a JSON string encoded with the string fields symbol, name, description, website, image, and type.
 
 Solidity interface for Mineable Token Metadata:
-
+``` solidity
 /**
  * @title ERC-918 Mineable Token Standard, optional metadata extension
  * @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-918.md
@@ -297,8 +375,10 @@ interface ERC918Metadata is AbstractERC918 {
      */
     function metadataURI() external view returns (string);
 }
-Mineable Token Metadata JSON schema definition:
+```
 
+Mineable Token Metadata JSON schema definition:
+``` solidity
 {
     "title": "Mineable Token Metadata",
     "type": "object",
@@ -329,16 +409,21 @@ Mineable Token Metadata JSON schema definition:
         }
     }
 }
-Rationale
-The solidity keccak256 algorithm does not have to be used, but it is recommended since it is a cost effective one-way algorithm to perform in the EVM and simple to perform in solidity. The nonce is the solution that miners try to find and so it is part of the hashing algorithm. A challengeNumber is also part of the hash so that future blocks cannot be mined since it acts like a random piece of data that is not revealed until a mining round starts. The msg.sender address is part of the hash so that a nonce solution is valid only for a particular Ethereum account and so the solution is not susceptible to man-in-the-middle attacks. This also allows pools to operate without being easily cheated by the miners since pools can force miners to mine using the pool's address in the hash algorithm.
+```
+
+### Rationale
+
+The solidity keccak256 algorithm does not have to be used, but it is recommended since it is a cost effective one-way algorithm to perform in the EVM and simple to perform in solidity. The nonce is the solution that miners try to find and so it is part of the hashing algorithm. A challengeNumber is also part of the hash so that future blocks cannot be mined since it acts like a random piece of data that is not revealed until a mining round starts. The msg.sender address is part of the hash so that a nonce solution is valid only for a particular Ethereum account and so the solution is not susceptible to man-in-the-middle attacks. This also allows pools to operate without being easily cheated by the miners since pools can force miners to mine using the pool's address in the hash algorithm.  
 
 The economics of transferring electricity and hardware into mined token assets offers a flourishing community of decentralized miners the option to be involved in the Ethereum token economy directly. By voting with hash power, an economically pegged asset to real-world resources, miners are incentivized to participate in early token trade to revamp initial costs, providing a bootstrapped stimulus mechanism between miners and early investors.
 
-One community concern for mined tokens has been around energy use without a function for securing a network. Although token mining does not secure a network, it serves the function of securing a community from corruption as it offers an alternative to centralized ICOs. Furthermore, an initial mining offering may last as little as a week, a day, or an hour at which point all of the tokens would have been minted.
+One community concern for mined tokens has been around energy use without a function for securing a network.  Although token mining does not secure a network, it serves the function of securing a community from corruption as it offers an alternative to centralized ICOs. Furthermore, an initial mining offering may last as little as a week, a day, or an hour at which point all of the tokens would have been minted.
 
-Backwards Compatibility
+
+### Backwards Compatibility
 Earlier versions of this standard incorporated a redundant 'challenge_digest' parameter on the mint() function that hash-encoded the packed variables challengeNumber, msg.sender and nonce. It was decided that this could be removed from the standard to help minimize processing and thereby gas usage during mint operations. However, in the name of interoperability with existing mining programs and pool software the following contract can be added to the inheritance tree:
 
+``` solidity
 /**
  * @title ERC-918 Mineable Token Standard, optional backwards compatibility function
  * @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-918.md
@@ -358,7 +443,7 @@ contract ERC918BackwardsCompatible is AbstractERC918 {
         success = mint(_nonce);
     }
 }
-
+```
 Reference
 
 https://github.com/ethereum/EIPs/blob/master/EIPS/eip-918.md
